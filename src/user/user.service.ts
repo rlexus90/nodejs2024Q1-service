@@ -46,6 +46,8 @@ export class UserService {
     if (user.password !== updatePasswordDto.oldPassword)
       throw new HttpException(`oldPassword is wrong`, HttpStatus.FORBIDDEN);
     user.password = updatePasswordDto.newPassword;
+    user.version += 1;
+    user.updatedAt = Date.now();
   }
 
   deleteUser(id: string) {

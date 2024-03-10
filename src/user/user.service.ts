@@ -10,6 +10,7 @@ export class UserService {
   constructor(private databaseService: DatabaseService) {}
 
   createUser(createUserDto: CreateUserDto): UserResp {
+    //I think this must be, but test fallen
     // const isUserExist = this.databaseService.users.some(
     //   (user) => user.login === createUserDto.login,
     // );

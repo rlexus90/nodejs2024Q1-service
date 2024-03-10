@@ -15,3 +15,5 @@ export const defaultUser: User = {
   createdAt: 1710013156085,
   updatedAt: 1710013156085,
 };
+
+export type UserResp = Omit<User, 'password'>;

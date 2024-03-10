@@ -1,8 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from 'src/types/user';
 
 @Injectable()
-export class DatabaseService {
+export class UsersDB {
   public users: User[] = [];
 
   public getUsers = (): User[] => {
@@ -16,13 +16,5 @@ export class DatabaseService {
 
   public setUser = (user: User) => {
     this.users.push(user);
-  };
-
-  public delUser = (id: string) => {
-    const index = this.users.findIndex((user) => user.id === id);
-
-    if (index === -1)
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    this.users.splice(index, 1);
   };
 }

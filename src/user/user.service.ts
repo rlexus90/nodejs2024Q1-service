@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { User } from 'src/types/user';
+import { User, UserResp } from 'src/types/user';
 import { CreateUserDto } from './dto/greateUserDto';
 import * as uuid from 'uuid';
 import { DatabaseService } from 'src/database/database.service';
@@ -9,15 +9,15 @@ import { UpdatePasswordDto } from './dto/updatePasswordDto';
 export class UserService {
   constructor(private databaseService: DatabaseService) {}
 
-  createUser(createUserDto: CreateUserDto): User {
-    const isUserExist = this.databaseService.users.some(
-      (user) => user.login === createUserDto.login,
-    );
-    if (isUserExist)
-      throw new HttpException(
-        `User with login - ${createUserDto.login} already exist`,
-        HttpStatus.BAD_REQUEST,
-      );
+  createUser(createUserDto: CreateUserDto): UserResp {
+    // const isUserExist = this.databaseService.users.some(
+    //   (user) => user.login === createUserDto.login,
+    // );
+    // if (isUserExist)
+    //   throw new HttpException(
+    //     `User with login - ${createUserDto.login} already exist`,
+    //     HttpStatus.BAD_REQUEST,
+    //   );
 
     const user: User = {
       ...createUserDto,
@@ -27,7 +27,9 @@ export class UserService {
       updatedAt: Date.now(),
     };
     this.databaseService.setUser(user);
-    return user;
+    const userResp = Object.assign({}, user);
+    delete userResp.password as unknown as UserResp;
+    return userResp;
   }
 
   returnAllUsers() {
@@ -48,6 +50,9 @@ export class UserService {
     user.password = updatePasswordDto.newPassword;
     user.version += 1;
     user.updatedAt = Date.now();
+    const userResp = Object.assign({}, user);
+    delete userResp.password as unknown as UserResp;
+    return userResp;
   }
 
   deleteUser(id: string) {

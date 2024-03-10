@@ -10,7 +10,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { User } from 'src/types/user';
+import { User, UserResp } from 'src/types/user';
 import { CreateUserDto } from './dto/greateUserDto';
 import { UserService } from './user.service';
 import { UpdatePasswordDto } from './dto/updatePasswordDto';
@@ -30,7 +30,7 @@ export class UserController {
   }
 
   @Post('')
-  createUser(@Body() createUserDto: CreateUserDto): User {
+  createUser(@Body() createUserDto: CreateUserDto): UserResp {
     return this.userService.createUser(createUserDto);
   }
 
@@ -38,8 +38,8 @@ export class UserController {
   updatePassword(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
-  ): void {
-    this.userService.updateUserPassword(id, updatePasswordDto);
+  ): UserResp {
+    return this.userService.updateUserPassword(id, updatePasswordDto);
   }
 
   @Delete(':id')

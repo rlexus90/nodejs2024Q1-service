@@ -4,6 +4,7 @@ import { UpdateArtistDto } from 'src/artist/dto/updateArtistDto';
 import { UpdateTrackDto } from 'src/track/dto/updateTrackDto';
 import { Album } from 'src/types/album';
 import { Artist } from 'src/types/artist';
+import { Favorites } from 'src/types/favorites';
 import { Track } from 'src/types/track';
 import { User } from 'src/types/user';
 
@@ -13,6 +14,11 @@ export class DatabaseService {
   public tracks: Track[] = [];
   public artists: Artist[] = [];
   public albums: Album[] = [];
+  public favorites: Favorites = {
+    albums: [],
+    tracks: [],
+    artists: [],
+  };
 
   public getUserId = (id: string): User | undefined => {
     const user = this.users.find((user) => user.id === id);
@@ -57,6 +63,7 @@ export class DatabaseService {
     if (index === -1)
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     this.tracks.splice(index, 1);
+    this.delFavsTrack(id);
   };
 
   public getArtistId = (id: string): Artist | undefined => {
@@ -82,6 +89,8 @@ export class DatabaseService {
     this.albums.forEach((album) => {
       if (album.artistId === id) album.artistId = null;
     });
+
+    this.delFavsArtist(id);
   };
 
   public updateArtist = (id: string, updateArtistDto: UpdateArtistDto) => {
@@ -125,5 +134,48 @@ export class DatabaseService {
     this.tracks.forEach((track) => {
       if (track.albumId === id) track.albumId = null;
     });
+
+    this.delFavsAlbum(id);
+  };
+
+  public setFavsTrack = (id: string) => {
+    this.favorites.tracks.push(id);
+  };
+
+  public delFavsTrack = (id: string) => {
+    const index = this.favorites.tracks.findIndex((trackId) => trackId === id);
+
+    if (index === -1) return false;
+
+    this.favorites.tracks.splice(index, 1);
+    return true;
+  };
+
+  public setFavsAlbum = (id: string) => {
+    this.favorites.albums.push(id);
+  };
+
+  public delFavsAlbum = (id: string) => {
+    const index = this.favorites.albums.findIndex((albumId) => albumId === id);
+
+    if (index === -1) return false;
+
+    this.favorites.albums.splice(index, 1);
+    return true;
+  };
+
+  public setFavsArtist = (id: string) => {
+    this.favorites.artists.push(id);
+  };
+
+  public delFavsArtist = (id: string) => {
+    const index = this.favorites.artists.findIndex(
+      (artistId) => artistId === id,
+    );
+
+    if (index === -1) return false;
+
+    this.favorites.artists.splice(index, 1);
+    return true;
   };
 }

@@ -16,21 +16,21 @@ import { UpdateTrackDto } from './dto/updateTrackDto';
 
 @Controller('track')
 export class TrackController {
-  constructor(private trackServise: TrackService) {}
+  constructor(private trackService: TrackService) {}
 
   @Get('')
   getTracks(): Track[] {
-    return this.trackServise.returnAllTracks();
+    return this.trackService.returnAllTracks();
   }
 
   @Get(':id')
   getTrack(@Param('id', ParseUUIDPipe) id: string): Track {
-    return this.trackServise.returnTrackbyId(id);
+    return this.trackService.returnTrackById(id);
   }
 
   @Post('')
   createTrack(@Body() createTrackDto: CreateTrackDto): Track {
-    return this.trackServise.createTrack(createTrackDto);
+    return this.trackService.createTrack(createTrackDto);
   }
 
   @Put(':id')
@@ -38,12 +38,12 @@ export class TrackController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ): Track {
-    return this.trackServise.updateTrack(id, updateTrackDto);
+    return this.trackService.updateTrack(id, updateTrackDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
   deleteUser(@Param('id', ParseUUIDPipe) id: string) {
-    this.trackServise.delTrack(id);
+    this.trackService.delTrack(id);
   }
 }

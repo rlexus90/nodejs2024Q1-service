@@ -23,7 +23,7 @@ export class FavsService {
         this.albumService.returnAlbumById(id),
       ),
       tracks: this.databaseService.favorites.tracks.map((id) =>
-        this.trackService.returnTrackbyId(id),
+        this.trackService.returnTrackById(id),
       ),
     };
     return favs;

@@ -10,7 +10,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { User, UserResp } from 'src/types/user';
-import { CreateUserDto } from './dto/greateUserDto';
+import { CreateUserDto } from './dto/createUserDto';
 import { UserService } from './user.service';
 import { UpdatePasswordDto } from './dto/updatePasswordDto';
 
@@ -25,7 +25,7 @@ export class UserController {
 
   @Get(':id')
   getUser(@Param('id', ParseUUIDPipe) id: string): User {
-    return this.userService.returtUserbyId(id);
+    return this.userService.returnUserById(id);
   }
 
   @Post('')

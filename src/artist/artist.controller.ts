@@ -43,7 +43,7 @@ export class ArtistController {
 
   @Delete(':id')
   @HttpCode(204)
-  ddeleteArtist(@Param('id', ParseUUIDPipe) id: string) {
+  deleteArtist(@Param('id', ParseUUIDPipe) id: string) {
     this.artistService.delArtist(id);
   }
 }

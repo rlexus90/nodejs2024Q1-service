@@ -13,7 +13,7 @@ export class TrackService {
     return this.databaseService.tracks;
   }
 
-  returnTrackbyId(id: string) {
+  returnTrackById(id: string) {
     const track = this.databaseService.getTrackId(id);
     if (!track)
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);

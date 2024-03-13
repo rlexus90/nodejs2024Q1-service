@@ -48,7 +48,7 @@ export class FavsController {
 
   @Delete('artist/:id')
   @HttpCode(204)
-  delArtistromFavs(@Param('id', ParseUUIDPipe) id: string) {
+  delArtistFromFavs(@Param('id', ParseUUIDPipe) id: string) {
     this.favsService.delArtist(id);
   }
 }

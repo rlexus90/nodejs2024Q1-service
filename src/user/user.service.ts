@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User, UserResp } from 'src/types/user';
-import { CreateUserDto } from './dto/greateUserDto';
+import { CreateUserDto } from './dto/createUserDto';
 import * as uuid from 'uuid';
 import { DatabaseService } from 'src/database/database.service';
 import { UpdatePasswordDto } from './dto/updatePasswordDto';
@@ -37,14 +37,14 @@ export class UserService {
     return this.databaseService.users;
   }
 
-  returtUserbyId(id: string) {
+  returnUserById(id: string) {
     const user = this.databaseService.getUserId(id);
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     return user;
   }
 
   updateUserPassword(id: string, updatePasswordDto: UpdatePasswordDto) {
-    const user = this.returtUserbyId(id);
+    const user = this.returnUserById(id);
 
     if (user.password !== updatePasswordDto.oldPassword)
       throw new HttpException(`oldPassword is wrong`, HttpStatus.FORBIDDEN);

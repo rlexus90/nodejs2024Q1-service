@@ -19,7 +19,7 @@ export class TrackController {
   constructor(private trackService: TrackService) {}
 
   @Get('')
-  getTracks(): Track[] {
+  getTracks() {
     return this.trackService.returnAllTracks();
   }
 

@@ -9,8 +9,8 @@ import { UpdateTrackDto } from './dto/updateTrackDto';
 export class TrackService {
   constructor(private databaseService: DatabaseService) {}
 
-  returnAllTracks() {
-    return this.databaseService.tracks;
+  async returnAllTracks() {
+    return this.databaseService.trackService.getAll();
   }
 
   returnTrackById(id: string) {

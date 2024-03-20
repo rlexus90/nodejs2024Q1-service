@@ -7,6 +7,7 @@ import { Artist } from 'src/types/artist';
 import { Favorites } from 'src/types/favorites';
 import { Track } from 'src/types/track';
 import { User } from 'src/types/user';
+import { DbTrackService } from './services/DBtrack.service';
 
 @Injectable()
 export class DatabaseService {
@@ -19,6 +20,8 @@ export class DatabaseService {
     tracks: [],
     artists: [],
   };
+
+  constructor(public trackService: DbTrackService) {}
 
   public getUserId = (id: string): User | undefined => {
     const user = this.users.find((user) => user.id === id);

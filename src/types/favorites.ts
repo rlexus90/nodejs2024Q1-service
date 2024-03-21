@@ -11,5 +11,5 @@ export interface Favorites {
 export interface FavoritesResponse {
   artists: Artist[];
   albums: Album[];
-  tracks: Track[];
+  tracks: Promise<Track>[];
 }

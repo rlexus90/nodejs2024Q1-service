@@ -9,12 +9,12 @@ import { UpdateTrackDto } from './dto/updateTrackDto';
 export class TrackService {
   constructor(private databaseService: DatabaseService) {}
 
-  async returnAllTracks() {
+  async returnAllTracks(): Promise<Track[]> {
     return this.databaseService.trackService.getAll();
   }
 
-  returnTrackById(id: string) {
-    const track = this.databaseService.getTrackId(id);
+  async returnTrackById(id: string): Promise<Track> {
+    const track = await this.databaseService.trackService.getById(id);
     if (!track)
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     return track;
@@ -25,15 +25,15 @@ export class TrackService {
       ...createTrackDto,
       id: uuid.v4(),
     };
-    this.databaseService.setTrack(track);
+    this.databaseService.trackService.set(track);
     return track;
   }
 
-  updateTrack(id: string, updateTrackDto: UpdateTrackDto) {
-    return this.databaseService.updateTrack(id, updateTrackDto);
+  async updateTrack(id: string, updateTrackDto: UpdateTrackDto) {
+    return this.databaseService.trackService.update(id, updateTrackDto);
   }
 
-  delTrack(id: string) {
-    this.databaseService.delTrack(id);
+  async delTrack(id: string) {
+    return this.databaseService.trackService.delete(id);
   }
 }

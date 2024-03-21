@@ -15,7 +15,7 @@ export class FavsController {
   constructor(private favsService: FavsService) {}
 
   @Get('')
-  getFavs(): FavoritesResponse {
+  getFavs(): Promise<FavoritesResponse> {
     return this.favsService.returnFavs();
   }
 

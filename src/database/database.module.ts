@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { DatabaseService } from './database.service';
 import { PrismaModule } from './prisma/prisma.module';
-import { DbTrackService } from './services/DBtrack.service';
+import { DbTrackService } from './services/DBTrack.service';
+import { DbUserService } from './services/DBUser.service';
 
 @Module({
-  providers: [DatabaseService, DbTrackService],
+  providers: [DatabaseService, DbTrackService, DbUserService],
   exports: [DatabaseService],
   imports: [PrismaModule],
 })

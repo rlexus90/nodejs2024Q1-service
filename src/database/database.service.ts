@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateAlbumDto } from 'src/album/dto/updateAlbumDto';
 import { UpdateArtistDto } from 'src/artist/dto/updateArtistDto';
-import { UpdateTrackDto } from 'src/track/dto/updateTrackDto';
 import { Album } from 'src/types/album';
 import { Artist } from 'src/types/artist';
 import { Favorites } from 'src/types/favorites';
 import { Track } from 'src/types/track';
 import { User } from 'src/types/user';
-import { DbTrackService } from './services/DBtrack.service';
+import { DbTrackService } from './services/DBTrack.service';
+import { DbUserService } from './services/DBUser.service';
 
 @Injectable()
 export class DatabaseService {
@@ -21,53 +21,27 @@ export class DatabaseService {
     artists: [],
   };
 
-  constructor(public trackService: DbTrackService) {}
+  constructor(
+    public trackService: DbTrackService,
+    public userService: DbUserService,
+  ) {}
 
-  public getUserId = (id: string): User | undefined => {
-    const user = this.users.find((user) => user.id === id);
-    return user;
-  };
+  // public getUserId = (id: string): User | undefined => {
+  //   const user = this.users.find((user) => user.id === id);
+  //   return user;
+  // };
 
-  public setUser = (user: User) => {
-    this.users.push(user);
-  };
+  // public setUser = (user: User) => {
+  //   this.users.push(user);
+  // };
 
-  public delUser = (id: string) => {
-    const index = this.users.findIndex((user) => user.id === id);
+  // public delUser = (id: string) => {
+  //   const index = this.users.findIndex((user) => user.id === id);
 
-    if (index === -1)
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    this.users.splice(index, 1);
-  };
-
-  public getTrackId = (id: string): Track | undefined => {
-    const track = this.tracks.find((track) => track.id === id);
-    return track;
-  };
-
-  public setTrack = (track: Track) => {
-    this.tracks.push(track);
-  };
-
-  public updateTrack = (id: string, updateTrackDto: UpdateTrackDto) => {
-    const index = this.tracks.findIndex((track) => track.id === id);
-
-    if (index === -1)
-      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
-
-    const newTrack: Track = { ...this.tracks[index], ...updateTrackDto };
-    this.tracks[index] = newTrack;
-    return newTrack;
-  };
-
-  public delTrack = (id: string) => {
-    const index = this.tracks.findIndex((track) => track.id === id);
-
-    if (index === -1)
-      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
-    this.tracks.splice(index, 1);
-    this.delFavsTrack(id);
-  };
+  //   if (index === -1)
+  //     throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+  //   this.users.splice(index, 1);
+  // };
 
   public getArtistId = (id: string): Artist | undefined => {
     const artist = this.artists.find((artist) => artist.id === id);

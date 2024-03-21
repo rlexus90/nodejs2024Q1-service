@@ -4,6 +4,8 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
@@ -19,12 +21,12 @@ export class TrackController {
   constructor(private trackService: TrackService) {}
 
   @Get('')
-  getTracks() {
+  getTracks(): Promise<Track[]> {
     return this.trackService.returnAllTracks();
   }
 
   @Get(':id')
-  getTrack(@Param('id', ParseUUIDPipe) id: string): Track {
+  getTrack(@Param('id', ParseUUIDPipe) id: string): Promise<Track> {
     return this.trackService.returnTrackById(id);
   }
 
@@ -37,13 +39,17 @@ export class TrackController {
   updateTrackId(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
-  ): Track {
+  ) {
     return this.trackService.updateTrack(id, updateTrackDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  deleteUser(@Param('id', ParseUUIDPipe) id: string) {
-    this.trackService.delTrack(id);
+  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      await this.trackService.delTrack(id);
+    } catch {
+      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
+    }
   }
 }

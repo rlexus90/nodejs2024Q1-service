@@ -1,35 +1,40 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
-import { User, UserResp } from 'src/types/user';
 import { CreateUserDto } from './dto/createUserDto';
 import { UserService } from './user.service';
 import { UpdatePasswordDto } from './dto/updatePasswordDto';
+import { UserEntity } from 'src/database/entity/userEntity';
 
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('')
-  getUsers(): User[] {
+  getUsers(): Promise<UserEntity[]> {
     return this.userService.returnAllUsers();
   }
 
   @Get(':id')
-  getUser(@Param('id', ParseUUIDPipe) id: string): User {
+  getUser(@Param('id', ParseUUIDPipe) id: string): Promise<UserEntity> {
     return this.userService.returnUserById(id);
   }
 
   @Post('')
-  createUser(@Body() createUserDto: CreateUserDto): UserResp {
+  createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     return this.userService.createUser(createUserDto);
   }
 
@@ -37,13 +42,17 @@ export class UserController {
   updatePassword(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
-  ): UserResp {
+  ): Promise<UserEntity> {
     return this.userService.updateUserPassword(id, updatePasswordDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
   deleteUser(@Param('id', ParseUUIDPipe) id: string) {
-    this.userService.deleteUser(id);
+    try {
+      this.userService.deleteUser(id);
+    } catch {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
   }
 }

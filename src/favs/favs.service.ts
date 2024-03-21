@@ -14,7 +14,7 @@ export class FavsService {
     private artistService: ArtistService,
   ) {}
 
-  returnFavs() {
+  async returnFavs() {
     const favs: FavoritesResponse = {
       artists: this.databaseService.favorites.artists.map((id) =>
         this.artistService.returnArtistById(id),
@@ -22,15 +22,15 @@ export class FavsService {
       albums: this.databaseService.favorites.albums.map((id) =>
         this.albumService.returnAlbumById(id),
       ),
-      tracks: this.databaseService.favorites.tracks.map((id) =>
-        this.trackService.returnTrackById(id),
+      tracks: await this.databaseService.favorites.tracks.map(
+        async (id) => await this.trackService.returnTrackById(id),
       ),
     };
     return favs;
   }
 
-  setTrack(id: string) {
-    const track = this.databaseService.getTrackId(id);
+  async setTrack(id: string) {
+    const track = await this.databaseService.trackService.getById(id);
     if (!track)
       throw new HttpException(
         'Track not found',
@@ -40,7 +40,7 @@ export class FavsService {
   }
 
   delTrack(id: string) {
-    const track = this.databaseService.getTrackId(id);
+    const track = this.databaseService.trackService.getById(id);
     if (!track)
       throw new HttpException(
         'Track not found',

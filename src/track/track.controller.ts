@@ -24,26 +24,26 @@ export class TrackController {
   constructor(private trackService: TrackService) {}
 
   @Get('')
-  getTracks(): Promise<Track[]> {
-    return this.trackService.returnAllTracks();
+  async getTracks(): Promise<Track[]> {
+    return await this.trackService.returnAllTracks();
   }
 
   @Get(':id')
-  getTrack(@Param('id', ParseUUIDPipe) id: string): Promise<Track> {
-    return this.trackService.returnTrackById(id);
+  async getTrack(@Param('id', ParseUUIDPipe) id: string): Promise<Track> {
+    return await this.trackService.returnTrackById(id);
   }
 
   @Post('')
-  createTrack(@Body() createTrackDto: CreateTrackDto): Track {
-    return this.trackService.createTrack(createTrackDto);
+  async createTrack(@Body() createTrackDto: CreateTrackDto): Promise<Track> {
+    return await this.trackService.createTrack(createTrackDto);
   }
 
   @Put(':id')
-  updateTrackId(
+  async updateTrackId(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ) {
-    return this.trackService.updateTrack(id, updateTrackDto);
+    return await this.trackService.updateTrack(id, updateTrackDto);
   }
 
   @Delete(':id')

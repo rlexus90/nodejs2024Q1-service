@@ -25,26 +25,28 @@ export class AlbumController {
   constructor(private albumService: AlbumService) {}
 
   @Get('')
-  getAlbum(): Promise<AlbumEntity[]> {
-    return this.albumService.returnAllAlbums();
+  async getAlbum(): Promise<AlbumEntity[]> {
+    return await this.albumService.returnAllAlbums();
   }
 
   @Get(':id')
-  getAlbumId(@Param('id', ParseUUIDPipe) id: string): Promise<AlbumEntity> {
-    return this.albumService.returnAlbumById(id);
+  async getAlbumId(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<AlbumEntity> {
+    return await this.albumService.returnAlbumById(id);
   }
 
   @Post('')
-  createAlbum(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
-    return this.albumService.createAlbum(createAlbumDto);
+  async createAlbum(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
+    return await this.albumService.createAlbum(createAlbumDto);
   }
 
   @Put(':id')
-  updateArtistId(
+  async updateArtistId(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
   ): Promise<AlbumEntity> {
-    return this.albumService.updateAlbum(id, updateAlbumDto);
+    return await this.albumService.updateAlbum(id, updateAlbumDto);
   }
 
   @Delete(':id')

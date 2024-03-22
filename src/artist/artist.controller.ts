@@ -25,26 +25,30 @@ export class ArtistController {
   constructor(private artistService: ArtistService) {}
 
   @Get('')
-  getArtist(): Promise<ArtistEntity[]> {
-    return this.artistService.returnAllArtists();
+  async getArtist(): Promise<ArtistEntity[]> {
+    return await this.artistService.returnAllArtists();
   }
 
   @Get(':id')
-  getTArtistId(@Param('id', ParseUUIDPipe) id: string): Promise<ArtistEntity> {
-    return this.artistService.returnArtistById(id);
+  async getTArtistId(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ArtistEntity> {
+    return await this.artistService.returnArtistById(id);
   }
 
   @Post('')
-  createArtist(@Body() createArtistDto: CreateArtistDto): Artist {
-    return this.artistService.createArtist(createArtistDto);
+  async createArtist(
+    @Body() createArtistDto: CreateArtistDto,
+  ): Promise<Artist> {
+    return await this.artistService.createArtist(createArtistDto);
   }
 
   @Put(':id')
-  updateArtistId(
+  async updateArtistId(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
   ): Promise<ArtistEntity> {
-    return this.artistService.updateArtist(id, updateArtistDto);
+    return await this.artistService.updateArtist(id, updateArtistDto);
   }
 
   @Delete(':id')

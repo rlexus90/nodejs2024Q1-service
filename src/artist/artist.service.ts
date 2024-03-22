@@ -20,12 +20,12 @@ export class ArtistService {
     return artist;
   }
 
-  createArtist(createArtistDto: CreateArtistDto): Artist {
+  async createArtist(createArtistDto: CreateArtistDto): Promise<Artist> {
     const artist: Artist = {
       ...createArtistDto,
       id: uuid.v4(),
     };
-    this.databaseService.artistService.set(artist);
+    await this.databaseService.artistService.set(artist);
     return artist;
   }
 

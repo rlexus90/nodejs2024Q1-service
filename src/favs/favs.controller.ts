@@ -20,8 +20,8 @@ export class FavsController {
   constructor(private favsService: FavsService) {}
 
   @Get('')
-  getFavs(): Promise<FavoritesResponse> {
-    return this.favsService.returnFavs();
+  async getFavs(): Promise<FavoritesResponse> {
+    return await this.favsService.returnFavs();
   }
 
   @Post('track/:id')

@@ -20,12 +20,12 @@ export class TrackService {
     return track;
   }
 
-  createTrack(createTrackDto: CreateTrackDto): Track {
+  async createTrack(createTrackDto: CreateTrackDto): Promise<Track> {
     const track: Track = {
       ...createTrackDto,
       id: uuid.v4(),
     };
-    this.databaseService.trackService.set(track);
+    await this.databaseService.trackService.set(track);
     return track;
   }
 

@@ -26,7 +26,7 @@ export class AlbumService {
       id: uuid.v4(),
     };
 
-    this.databaseService.albumService.set(album);
+    await this.databaseService.albumService.set(album);
     return album;
   }
 

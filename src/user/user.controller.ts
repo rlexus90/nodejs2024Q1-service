@@ -24,26 +24,26 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('')
-  getUsers(): Promise<UserEntity[]> {
-    return this.userService.returnAllUsers();
+  async getUsers(): Promise<UserEntity[]> {
+    return await this.userService.returnAllUsers();
   }
 
   @Get(':id')
-  getUser(@Param('id', ParseUUIDPipe) id: string): Promise<UserEntity> {
-    return this.userService.returnUserById(id);
+  async getUser(@Param('id', ParseUUIDPipe) id: string): Promise<UserEntity> {
+    return await this.userService.returnUserById(id);
   }
 
   @Post('')
-  createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
-    return this.userService.createUser(createUserDto);
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+    return await this.userService.createUser(createUserDto);
   }
 
   @Put(':id')
-  updatePassword(
+  async updatePassword(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ): Promise<UserEntity> {
-    return this.userService.updateUserPassword(id, updatePasswordDto);
+    return await this.userService.updateUserPassword(id, updatePasswordDto);
   }
 
   @Delete(':id')

@@ -37,4 +37,38 @@ export class DbArtistService {
   async delete(id: string) {
     return this.prisma.artist.delete({ where: { id } });
   }
+
+  async returnFavs(): Promise<ArtistEntity[]> {
+    return (
+      await this.prisma.artist.findMany({ where: { favorite: true } })
+    ).map((artist) => new ArtistEntity(artist));
+  }
+
+  async addToFavs(id: string) {
+    try {
+      await this.prisma.artist.update({
+        where: { id },
+        data: { favorite: true },
+      });
+    } catch (e) {
+      throw new HttpException(
+        'Artist not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+  }
+
+  async delFromFavs(id: string) {
+    try {
+      await this.prisma.artist.update({
+        where: { id, favorite: true },
+        data: { favorite: false },
+      });
+    } catch (e) {
+      throw new HttpException(
+        'This artist is not favorite',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
 }

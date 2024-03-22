@@ -1,6 +1,6 @@
-import { Album } from './album';
-import { Artist } from './artist';
-import { Track } from './track';
+import { ArtistEntity } from 'src/database/entity/artistEntity';
+import { AlbumEntity } from 'src/database/entity/albumEntity';
+import { TrackEntity } from 'src/database/entity/trackEntity';
 
 export interface Favorites {
   artists: string[];
@@ -9,7 +9,7 @@ export interface Favorites {
 }
 
 export interface FavoritesResponse {
-  artists: Artist[];
-  albums: Album[];
-  tracks: Promise<Track>[];
+  artists: ArtistEntity[];
+  albums: AlbumEntity[];
+  tracks: TrackEntity[];
 }

@@ -7,6 +7,5 @@ import { DatabaseModule } from 'src/database/database.module';
   providers: [ArtistService],
   controllers: [ArtistController],
   imports: [DatabaseModule],
-  exports: [ArtistService],
 })
 export class ArtistModule {}

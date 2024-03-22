@@ -1,114 +1,41 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { AlbumService } from 'src/album/album.service';
-import { ArtistService } from 'src/artist/artist.service';
+import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { TrackService } from 'src/track/track.service';
 import { FavoritesResponse } from 'src/types/favorites';
 
 @Injectable()
 export class FavsService {
-  constructor(
-    private databaseService: DatabaseService,
-    private trackService: TrackService,
-    private albumService: AlbumService,
-    private artistService: ArtistService,
-  ) {}
+  constructor(private databaseService: DatabaseService) {}
 
   async returnFavs() {
-    // const favs: FavoritesResponse = {
-    //   artists: this.databaseService.favorites.artists.map((id) =>
-    //     this.artistService.returnArtistById(id),
-    //   ),
-    //   albums: this.databaseService.favorites.albums.map((id) =>
-    //     this.albumService.returnAlbumById(id),
-    //   ),
-    //   tracks: await this.databaseService.favorites.tracks.map(
-    //     async (id) => await this.trackService.returnTrackById(id),
-    //   ),
-    // };
     const favs: FavoritesResponse = {
-      artists: [],
-      albums: [],
-      tracks: [],
+      artists: await this.databaseService.artistService.returnFavs(),
+      albums: await this.databaseService.albumService.returnFavs(),
+      tracks: await this.databaseService.trackService.returnFavs(),
     };
     return favs;
   }
 
   async setTrack(id: string) {
-    const track = await this.databaseService.trackService.getById(id);
-    if (!track)
-      throw new HttpException(
-        'Track not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    this.databaseService.setFavsTrack(id);
+    this.databaseService.trackService.addToFavs(id);
   }
 
   delTrack(id: string) {
-    const track = this.databaseService.trackService.getById(id);
-    if (!track)
-      throw new HttpException(
-        'Track not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-
-    const isSuccess = this.databaseService.delFavsTrack(id);
-    if (!isSuccess)
-      throw new HttpException(
-        'This track is not favorite',
-        HttpStatus.NOT_FOUND,
-      );
+    this.databaseService.trackService.delFromFavs(id);
   }
 
   setAlbum(id: string) {
-    const album = this.databaseService.getAlbumId(id);
-    if (!album)
-      throw new HttpException(
-        'Album not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    this.databaseService.setFavsAlbum(id);
+    this.databaseService.albumService.addToFavs(id);
   }
 
   delAlbum(id: string) {
-    const album = this.databaseService.getAlbumId(id);
-    if (!album)
-      throw new HttpException(
-        'Album not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-
-    const isSuccess = this.databaseService.delFavsAlbum(id);
-    if (!isSuccess)
-      throw new HttpException(
-        'This album is not favorite',
-        HttpStatus.NOT_FOUND,
-      );
+    this.databaseService.albumService.delFromFavs(id);
   }
 
   setArtist(id: string) {
-    const artist = this.databaseService.artistService.getById(id);
-    if (!artist)
-      throw new HttpException(
-        'Artist not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    this.databaseService.setFavsArtist(id);
+    this.databaseService.artistService.addToFavs(id);
   }
 
   delArtist(id: string) {
-    const artist = this.databaseService.artistService.getById(id);
-    if (!artist)
-      throw new HttpException(
-        'Artist not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-
-    const isSuccess = this.databaseService.delFavsArtist(id);
-    if (!isSuccess)
-      throw new HttpException(
-        'This artist is not favorite',
-        HttpStatus.NOT_FOUND,
-      );
+    this.databaseService.artistService.delFromFavs(id);
   }
 }

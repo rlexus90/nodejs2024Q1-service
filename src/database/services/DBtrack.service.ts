@@ -37,4 +37,38 @@ export class DbTrackService {
   async delete(id: string) {
     return this.prisma.track.delete({ where: { id } });
   }
+
+  async returnFavs(): Promise<TrackEntity[]> {
+    return (
+      await this.prisma.track.findMany({ where: { favorite: true } })
+    ).map((track) => new TrackEntity(track));
+  }
+
+  async addToFavs(id: string) {
+    try {
+      await this.prisma.track.update({
+        where: { id },
+        data: { favorite: true },
+      });
+    } catch (e) {
+      throw new HttpException(
+        'Track not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+  }
+
+  async delFromFavs(id: string) {
+    try {
+      await this.prisma.track.update({
+        where: { id, favorite: true },
+        data: { favorite: false },
+      });
+    } catch (e) {
+      throw new HttpException(
+        'This track is not favorite',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
 }

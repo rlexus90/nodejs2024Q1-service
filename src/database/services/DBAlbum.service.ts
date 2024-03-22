@@ -37,4 +37,38 @@ export class DbAlbumService {
   async delete(id: string) {
     return this.prisma.album.delete({ where: { id } });
   }
+
+  async returnFavs(): Promise<AlbumEntity[]> {
+    return (
+      await this.prisma.album.findMany({ where: { favorite: true } })
+    ).map((album) => new AlbumEntity(album));
+  }
+
+  async addToFavs(id: string) {
+    try {
+      await this.prisma.album.update({
+        where: { id },
+        data: { favorite: true },
+      });
+    } catch (e) {
+      throw new HttpException(
+        'Album not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+  }
+
+  async delFromFavs(id: string) {
+    try {
+      await this.prisma.album.update({
+        where: { id, favorite: true },
+        data: { favorite: false },
+      });
+    } catch (e) {
+      throw new HttpException(
+        'This album is not favorite',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
 }

@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateAlbumDto } from 'src/album/dto/updateAlbumDto';
-import { UpdateArtistDto } from 'src/artist/dto/updateArtistDto';
 import { Album } from 'src/types/album';
 import { Artist } from 'src/types/artist';
 import { Favorites } from 'src/types/favorites';
@@ -8,6 +7,7 @@ import { Track } from 'src/types/track';
 import { User } from 'src/types/user';
 import { DbTrackService } from './services/DBTrack.service';
 import { DbUserService } from './services/DBUser.service';
+import { DbArtistService } from './services/DBArtist.service';
 
 @Injectable()
 export class DatabaseService {
@@ -24,62 +24,26 @@ export class DatabaseService {
   constructor(
     public trackService: DbTrackService,
     public userService: DbUserService,
+    public artistService: DbArtistService,
   ) {}
 
-  // public getUserId = (id: string): User | undefined => {
-  //   const user = this.users.find((user) => user.id === id);
-  //   return user;
-  // };
-
-  // public setUser = (user: User) => {
-  //   this.users.push(user);
-  // };
-
-  // public delUser = (id: string) => {
-  //   const index = this.users.findIndex((user) => user.id === id);
+  // public delArtist = (id: string) => {
+  //   const index = this.artists.findIndex((artist) => artist.id === id);
 
   //   if (index === -1)
-  //     throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-  //   this.users.splice(index, 1);
+  //     throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+  //   this.artists.splice(index, 1);
+
+  //   this.tracks.forEach((track) => {
+  //     if (track.artistId === id) track.artistId = null;
+  //   });
+
+  //   this.albums.forEach((album) => {
+  //     if (album.artistId === id) album.artistId = null;
+  //   });
+
+  //   this.delFavsArtist(id);
   // };
-
-  public getArtistId = (id: string): Artist | undefined => {
-    const artist = this.artists.find((artist) => artist.id === id);
-    return artist;
-  };
-
-  public setArtist = (artist: Artist) => {
-    this.artists.push(artist);
-  };
-
-  public delArtist = (id: string) => {
-    const index = this.artists.findIndex((artist) => artist.id === id);
-
-    if (index === -1)
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
-    this.artists.splice(index, 1);
-
-    this.tracks.forEach((track) => {
-      if (track.artistId === id) track.artistId = null;
-    });
-
-    this.albums.forEach((album) => {
-      if (album.artistId === id) album.artistId = null;
-    });
-
-    this.delFavsArtist(id);
-  };
-
-  public updateArtist = (id: string, updateArtistDto: UpdateArtistDto) => {
-    const index = this.artists.findIndex((artist) => artist.id === id);
-
-    if (index === -1)
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
-
-    const newArtist: Artist = { ...this.artists[index], ...updateArtistDto };
-    this.artists[index] = newArtist;
-    return newArtist;
-  };
 
   public getAlbumId = (id: string): Album | undefined => {
     const album = this.albums.find((album) => album.id === id);

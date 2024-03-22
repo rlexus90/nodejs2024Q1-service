@@ -15,16 +15,21 @@ export class FavsService {
   ) {}
 
   async returnFavs() {
+    // const favs: FavoritesResponse = {
+    //   artists: this.databaseService.favorites.artists.map((id) =>
+    //     this.artistService.returnArtistById(id),
+    //   ),
+    //   albums: this.databaseService.favorites.albums.map((id) =>
+    //     this.albumService.returnAlbumById(id),
+    //   ),
+    //   tracks: await this.databaseService.favorites.tracks.map(
+    //     async (id) => await this.trackService.returnTrackById(id),
+    //   ),
+    // };
     const favs: FavoritesResponse = {
-      artists: this.databaseService.favorites.artists.map((id) =>
-        this.artistService.returnArtistById(id),
-      ),
-      albums: this.databaseService.favorites.albums.map((id) =>
-        this.albumService.returnAlbumById(id),
-      ),
-      tracks: await this.databaseService.favorites.tracks.map(
-        async (id) => await this.trackService.returnTrackById(id),
-      ),
+      artists: [],
+      albums: [],
+      tracks: [],
     };
     return favs;
   }
@@ -82,7 +87,7 @@ export class FavsService {
   }
 
   setArtist(id: string) {
-    const artist = this.databaseService.getArtistId(id);
+    const artist = this.databaseService.artistService.getById(id);
     if (!artist)
       throw new HttpException(
         'Artist not found',
@@ -92,7 +97,7 @@ export class FavsService {
   }
 
   delArtist(id: string) {
-    const artist = this.databaseService.getArtistId(id);
+    const artist = this.databaseService.artistService.getById(id);
     if (!artist)
       throw new HttpException(
         'Artist not found',

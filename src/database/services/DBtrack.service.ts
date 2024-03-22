@@ -1,14 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Track } from '@prisma/client';
 import { UpdateTrackDto } from 'src/track/dto/updateTrackDto';
+import { TrackEntity } from '../entity/trackEntity';
+import { Track } from 'src/types/track';
 
 @Injectable()
 export class DbTrackService {
   constructor(private prisma: PrismaService) {}
 
-  async getAll(): Promise<Track[]> {
-    return await this.prisma.track.findMany();
+  async getAll(): Promise<TrackEntity[]> {
+    const tracks = await this.prisma.track.findMany();
+    return tracks.map((track) => new TrackEntity(track));
   }
 
   async set(track: Track) {
@@ -21,15 +23,15 @@ export class DbTrackService {
         where: { id },
         data: updateTrackDto,
       });
-      return track;
+      return new TrackEntity(track);
     } catch (e) {
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
   }
 
-  async getById(id: string): Promise<Track | null> {
+  async getById(id: string): Promise<TrackEntity | null> {
     const track = await this.prisma.track.findUnique({ where: { id } });
-    return track;
+    return new TrackEntity(track) || null;
   }
 
   async delete(id: string) {

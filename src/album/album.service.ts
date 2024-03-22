@@ -9,32 +9,32 @@ import { UpdateAlbumDto } from './dto/updateAlbumDto';
 export class AlbumService {
   constructor(private databaseService: DatabaseService) {}
 
-  returnAllAlbums() {
-    return this.databaseService.albums;
+  async returnAllAlbums() {
+    return this.databaseService.albumService.getAll();
   }
 
-  returnAlbumById(id: string) {
-    const album = this.databaseService.getAlbumId(id);
+  async returnAlbumById(id: string) {
+    const album = await this.databaseService.albumService.getById(id);
     if (!album)
       throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     return album;
   }
 
-  createAlbum(createAlbumDto: CreateAlbumDto): Album {
+  async createAlbum(createAlbumDto: CreateAlbumDto): Promise<Album> {
     const album: Album = {
       ...createAlbumDto,
       id: uuid.v4(),
     };
 
-    this.databaseService.setAlbum(album);
+    this.databaseService.albumService.set(album);
     return album;
   }
 
-  updateAlbum(id: string, updateAlbumDTO: UpdateAlbumDto) {
-    return this.databaseService.updateAlbum(id, updateAlbumDTO);
+  async updateAlbum(id: string, updateAlbumDTO: UpdateAlbumDto) {
+    return this.databaseService.albumService.update(id, updateAlbumDTO);
   }
 
-  delAlbum(id: string) {
-    this.databaseService.delAlbum(id);
+  async delAlbum(id: string) {
+    return this.databaseService.albumService.delete(id);
   }
 }

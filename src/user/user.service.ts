@@ -32,11 +32,15 @@ export class UserService {
   async updateUserPassword(id: string, updatePasswordDto: UpdatePasswordDto) {
     const user = await this.databaseService.userService.getById(id);
 
+    if (!user) throw new HttpException(`User not found`, HttpStatus.NOT_FOUND);
+
     if (user.password !== updatePasswordDto.oldPassword)
       throw new HttpException(`oldPassword is wrong`, HttpStatus.FORBIDDEN);
-    user.password = updatePasswordDto.newPassword;
-    user.version += 1;
-    return this.databaseService.userService.update(id, user);
+
+    return this.databaseService.userService.update(id, {
+      password: updatePasswordDto.newPassword,
+      version: { increment: 1 },
+    });
   }
 
   async deleteUser(id: string) {

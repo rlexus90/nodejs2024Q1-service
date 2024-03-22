@@ -31,7 +31,7 @@ export class DbTrackService {
 
   async getById(id: string): Promise<TrackEntity | null> {
     const track = await this.prisma.track.findUnique({ where: { id } });
-    return new TrackEntity(track) || null;
+    return track ? new TrackEntity(track) : null;
   }
 
   async delete(id: string) {
@@ -45,30 +45,16 @@ export class DbTrackService {
   }
 
   async addToFavs(id: string) {
-    try {
-      await this.prisma.track.update({
-        where: { id },
-        data: { favorite: true },
-      });
-    } catch (e) {
-      throw new HttpException(
-        'Track not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
+    return this.prisma.track.update({
+      where: { id },
+      data: { favorite: true },
+    });
   }
 
   async delFromFavs(id: string) {
-    try {
-      await this.prisma.track.update({
-        where: { id, favorite: true },
-        data: { favorite: false },
-      });
-    } catch (e) {
-      throw new HttpException(
-        'This track is not favorite',
-        HttpStatus.NOT_FOUND,
-      );
-    }
+    return this.prisma.track.update({
+      where: { id, favorite: true },
+      data: { favorite: false },
+    });
   }
 }

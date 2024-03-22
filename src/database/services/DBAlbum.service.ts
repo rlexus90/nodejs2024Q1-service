@@ -31,7 +31,7 @@ export class DbAlbumService {
 
   async getById(id: string): Promise<AlbumEntity | null> {
     const artist = await this.prisma.album.findUnique({ where: { id } });
-    return new AlbumEntity(artist);
+    return artist ? new AlbumEntity(artist) : null;
   }
 
   async delete(id: string) {
@@ -45,30 +45,16 @@ export class DbAlbumService {
   }
 
   async addToFavs(id: string) {
-    try {
-      await this.prisma.album.update({
-        where: { id },
-        data: { favorite: true },
-      });
-    } catch (e) {
-      throw new HttpException(
-        'Album not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
+    return this.prisma.album.update({
+      where: { id },
+      data: { favorite: true },
+    });
   }
 
   async delFromFavs(id: string) {
-    try {
-      await this.prisma.album.update({
-        where: { id, favorite: true },
-        data: { favorite: false },
-      });
-    } catch (e) {
-      throw new HttpException(
-        'This album is not favorite',
-        HttpStatus.NOT_FOUND,
-      );
-    }
+    return this.prisma.album.update({
+      where: { id, favorite: true },
+      data: { favorite: false },
+    });
   }
 }

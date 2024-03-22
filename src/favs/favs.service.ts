@@ -15,27 +15,27 @@ export class FavsService {
     return favs;
   }
 
-  async setTrack(id: string) {
-    this.databaseService.trackService.addToFavs(id);
+  setTrack(id: string) {
+    return this.databaseService.trackService.addToFavs(id);
   }
 
   delTrack(id: string) {
-    this.databaseService.trackService.delFromFavs(id);
+    return this.databaseService.trackService.delFromFavs(id);
   }
 
   setAlbum(id: string) {
-    this.databaseService.albumService.addToFavs(id);
+    return this.databaseService.albumService.addToFavs(id);
   }
 
   delAlbum(id: string) {
-    this.databaseService.albumService.delFromFavs(id);
+    return this.databaseService.albumService.delFromFavs(id);
   }
 
   setArtist(id: string) {
-    this.databaseService.artistService.addToFavs(id);
+    return this.databaseService.artistService.addToFavs(id);
   }
 
   delArtist(id: string) {
-    this.databaseService.artistService.delFromFavs(id);
+    return this.databaseService.artistService.delFromFavs(id);
   }
 }

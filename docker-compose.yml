@@ -1,0 +1,37 @@
+services:
+  db:
+    container_name: home-library-DB
+    image: postgres:16.2-alpine3.19
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_LOGIN}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '${DATABASE_PORT_DOCKER}:${DATABASE_PORT}'
+    networks:
+        - my_network
+
+  app:
+    container_name: home-library
+    build:
+      context: ./
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - '${PORT}:${PORT}'
+    environment:
+      DATABASE_HOST: db
+    networks:
+      - my_network
+    
+networks:
+  my_network:
+    name: my_network
+    driver: bridge
+volumes:
+  pgdata:
+

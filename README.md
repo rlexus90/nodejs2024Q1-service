@@ -1,10 +1,5 @@
 # Home Library Service
 
-## Prerequisites
-
-- Git - [Download & Install Git](https://git-scm.com/downloads).
-- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
-
 ## Downloading
 
 ```
@@ -19,13 +14,52 @@ npm install
 
 ## Running application
 
+ ### 1 Download image 
+ ```
+ docker pull rlexus90/home-library
+ ```
+ ### 2 Create database using script
+ ```
+ npm run create:db
+ or
+ sudo npm run create:db
+ ```
+ ### 3 Add prisma migration use 
+ ```
+ npm run migrate
+ ```
+ ### 4 Run both image
+
+ ## You cant create docker containers
+
+### Create light version  
 ```
-npm start
+npm run docker:prod
+or sudo npm run docker:prod
+```
+after run (only first time, or after delete volumes)
+``` 
+npm run migrate
 ```
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/api/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+### Create develop version (after change code in 'src' folder app automatically reload with changes)
+```
+npm run docker:dev
+or sudo npm run docker:prod
+```
+after run (only first time, or after delete volumes)
+``` 
+npm run migrate
+```
+PS if you use MackOS with chip M1 app can be crashed
+[InfoLink](https://github.com/nodejs/docker-node/issues/1946)
+(before all work correct 🤷)
+
+##  Vulnerabilities scanning 
+```
+npm run docker:scan
+```
+all vulnerabilities fixed.
 
 ## Testing
 
@@ -37,36 +71,3 @@ To run all tests without authorization
 npm run test
 ```
 
-To run only one of all test suites
-
-```
-npm run test -- <path to suite>
-```
-
-To run all test with authorization
-
-```
-npm run test:auth
-```
-
-To run only specific test suite with authorization
-
-```
-npm run test:auth -- <path to suite>
-```
-
-### Auto-fix and format
-
-```
-npm run lint
-```
-
-```
-npm run format
-```
-
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging

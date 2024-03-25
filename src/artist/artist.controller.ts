@@ -1,49 +1,63 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { Artist } from 'src/types/artist';
 import { CreateArtistDto } from './dto/createArtistDto';
 import { UpdateArtistDto } from './dto/updateArtistDto';
+import { ArtistEntity } from 'src/database/entity/artistEntity';
 
 @Controller('artist')
+@UseInterceptors(ClassSerializerInterceptor)
 export class ArtistController {
   constructor(private artistService: ArtistService) {}
 
   @Get('')
-  getArtist(): Artist[] {
-    return this.artistService.returnAllArtists();
+  async getArtist(): Promise<ArtistEntity[]> {
+    return await this.artistService.returnAllArtists();
   }
 
   @Get(':id')
-  getTArtistId(@Param('id', ParseUUIDPipe) id: string): Artist {
-    return this.artistService.returnArtistById(id);
+  async getTArtistId(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ArtistEntity> {
+    return await this.artistService.returnArtistById(id);
   }
 
   @Post('')
-  createArtist(@Body() createArtistDto: CreateArtistDto): Artist {
-    return this.artistService.createArtist(createArtistDto);
+  async createArtist(
+    @Body() createArtistDto: CreateArtistDto,
+  ): Promise<Artist> {
+    return await this.artistService.createArtist(createArtistDto);
   }
 
   @Put(':id')
-  updateArtistId(
+  async updateArtistId(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
-  ): Artist {
-    return this.artistService.updateArtist(id, updateArtistDto);
+  ): Promise<ArtistEntity> {
+    return await this.artistService.updateArtist(id, updateArtistDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  ddeleteArtist(@Param('id', ParseUUIDPipe) id: string) {
-    this.artistService.delArtist(id);
+  async deleteArtist(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      await this.artistService.delArtist(id);
+    } catch {
+      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+    }
   }
 }

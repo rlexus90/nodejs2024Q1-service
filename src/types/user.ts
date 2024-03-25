@@ -7,13 +7,6 @@ export interface User {
   updatedAt: number;
 }
 
-export const defaultUser: User = {
-  login: 'Default User',
-  password: 'Default Password',
-  id: 'ae3e62ad-8d0d-4627-a556-a864b92e741c',
-  version: 1,
-  createdAt: 1710013156085,
-  updatedAt: 1710013156085,
-};
-
 export type UserResp = Omit<User, 'password'>;
+
+export type UserDto = Omit<User, 'version' | 'createdAt' | 'updatedAt'>;

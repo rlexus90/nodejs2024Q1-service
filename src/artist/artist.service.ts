@@ -9,31 +9,31 @@ import { UpdateArtistDto } from './dto/updateArtistDto';
 export class ArtistService {
   constructor(private databaseService: DatabaseService) {}
 
-  returnAllArtists() {
-    return this.databaseService.artists;
+  async returnAllArtists() {
+    return this.databaseService.artistService.getAll();
   }
 
-  returnArtistById(id: string) {
-    const artist = this.databaseService.getArtistId(id);
+  async returnArtistById(id: string) {
+    const artist = await this.databaseService.artistService.getById(id);
     if (!artist)
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
     return artist;
   }
 
-  createArtist(createArtistDto: CreateArtistDto): Artist {
+  async createArtist(createArtistDto: CreateArtistDto): Promise<Artist> {
     const artist: Artist = {
       ...createArtistDto,
       id: uuid.v4(),
     };
-    this.databaseService.setArtist(artist);
+    await this.databaseService.artistService.set(artist);
     return artist;
   }
 
   updateArtist(id: string, updateArtistDto: UpdateArtistDto) {
-    return this.databaseService.updateArtist(id, updateArtistDto);
+    return this.databaseService.artistService.update(id, updateArtistDto);
   }
 
-  delArtist(id: string) {
-    this.databaseService.delArtist(id);
+  async delArtist(id: string) {
+    return this.databaseService.artistService.delete(id);
   }
 }

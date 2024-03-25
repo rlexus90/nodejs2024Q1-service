@@ -15,10 +15,11 @@ services:
         - my_network
 
   app:
-    container_name: home-library
-    image: home-library
+    container_name: home-library-dev
+    image: home-library-dev
     build:
       context: .
+      target: build
     depends_on:
       - db
     restart: always
@@ -38,6 +39,7 @@ services:
       - .:/usr/src/app
     networks:
       - my_network
+    command: npm run start:debug
     
 networks:
   my_network:

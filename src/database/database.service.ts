@@ -27,45 +27,4 @@ export class DatabaseService {
     public artistService: DbArtistService,
     public albumService: DbAlbumService,
   ) {}
-
-  // public setFavsTrack = (id: string) => {
-  //   this.favorites.tracks.push(id);
-  // };
-
-  // public delFavsTrack = (id: string) => {
-  //   const index = this.favorites.tracks.findIndex((trackId) => trackId === id);
-
-  //   if (index === -1) return false;
-
-  //   this.favorites.tracks.splice(index, 1);
-  //   return true;
-  // };
-
-  // public setFavsAlbum = (id: string) => {
-  //   this.favorites.albums.push(id);
-  // };
-
-  // public delFavsAlbum = (id: string) => {
-  //   const index = this.favorites.albums.findIndex((albumId) => albumId === id);
-
-  //   if (index === -1) return false;
-
-  //   this.favorites.albums.splice(index, 1);
-  //   return true;
-  // };
-
-  // public setFavsArtist = (id: string) => {
-  //   this.favorites.artists.push(id);
-  // };
-
-  // public delFavsArtist = (id: string) => {
-  //   const index = this.favorites.artists.findIndex(
-  //     (artistId) => artistId === id,
-  //   );
-
-  //   if (index === -1) return false;
-
-  //   this.favorites.artists.splice(index, 1);
-  //   return true;
-  // };
 }

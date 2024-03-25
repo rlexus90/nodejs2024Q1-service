@@ -22,8 +22,10 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "docker:prod": "docker-compose up --build",
     "docker:dev": "docker-compose  -f docker-compose_dev.yml up --build",
+    "docker:hub": "docker build -t home-library_hub .",
     "migrate" : "npx prisma migrate dev",
-    "docker:scan" : "docker scout cves"
+    "docker:scan" : "docker scout cves",
+    "create:db": "docker run -d --name postgres -p 5433:5432 -e POSTGRES_PASSWORD=qwerty postgres"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.3",

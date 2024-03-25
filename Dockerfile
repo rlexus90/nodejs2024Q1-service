@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install 
 
 COPY . .
-COPY prisma ./prisma/
+COPY prisma ./prisma
 
 RUN npx prisma generate dev
 USER node
@@ -34,5 +34,6 @@ COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/doc ./doc
 COPY --from=build /usr/src/app/prisma ./prisma
+COPY --from=build /usr/src/app/.env ./.env
 
 CMD [ "node", "dist/main.js" ]

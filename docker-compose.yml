@@ -34,8 +34,6 @@ services:
       DATABASE_URL: 'postgresql://${DATABASE_LOGIN}:${DATABASE_PASS}@db:${DATABASE_PORT}/${DATABASE_NAME}?schema=public'
     # env_file:
     #   - .env
-    volumes:
-      - .:/usr/src/app
     networks:
       - my_network
 

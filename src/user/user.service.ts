@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserDto } from 'src/types/user';
 import { CreateUserDto } from './dto/createUserDto';
 import * as uuid from 'uuid';
+import * as bcrypt from 'bcrypt';
 import { DatabaseService } from 'src/database/database.service';
 import { UpdatePasswordDto } from './dto/updatePasswordDto';
 import { UserEntity } from 'src/database/entity/userEntity';
@@ -11,8 +12,13 @@ export class UserService {
   constructor(private databaseService: DatabaseService) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const password = await bcrypt.hash(
+      createUserDto.password,
+      +process.env.CRYPT_SALT,
+    );
     const userDto: UserDto = {
       ...createUserDto,
+      password,
       id: uuid.v4(),
     };
     return await this.databaseService.userService.set(userDto);

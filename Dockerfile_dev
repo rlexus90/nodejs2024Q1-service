@@ -27,16 +27,8 @@ RUN npm run build
 RUN npm install --only=production \ 
 && npm cache clean --force
 
-# RUN npm uninstall bcrypt
-# RUN npm install bcrypt && npm cache clean --force
+RUN npm uninstall bcrypt
+RUN npm install bcrypt && npm cache clean --force
 USER node
 
-FROM node:21-alpine3.18 As production
-
-COPY --from=build /usr/src/app/node_modules ./node_modules
-COPY --from=build /usr/src/app/dist ./dist
-COPY --from=build /usr/src/app/doc ./doc
-COPY --from=build /usr/src/app/prisma ./prisma
-COPY --from=build /usr/src/app/.env ./.env
-
-CMD [ "node", "dist/main.js" ]
+CMD [ "npm", "run", "start:debug" ]

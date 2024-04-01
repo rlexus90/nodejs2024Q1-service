@@ -50,6 +50,14 @@ export class DbUserService {
   async delete(id: string) {
     return this.prisma.user.delete({ where: { id } });
   }
+
+  async getByLogin(login: string) {
+    try {
+      return await this.prisma.user.findMany({ where: { login } });
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 
 type UpdatePassDto = {

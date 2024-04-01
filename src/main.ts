@@ -12,7 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const swaggerData = await getSwaggerDoc();
-  SwaggerModule.setup('api', app, swaggerData);
+  SwaggerModule.setup('doc', app, swaggerData);
 
   await app.listen(PORT, () =>
     printInfo(`Server start on Port=${PORT}`, 'green'),

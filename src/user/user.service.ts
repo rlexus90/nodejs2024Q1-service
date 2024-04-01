@@ -40,11 +40,21 @@ export class UserService {
 
     if (!user) throw new HttpException(`User not found`, HttpStatus.NOT_FOUND);
 
-    if (user.password !== updatePasswordDto.oldPassword)
+    const match = await bcrypt.compare(
+      updatePasswordDto.oldPassword,
+      user.password,
+    );
+
+    if (!match)
       throw new HttpException(`oldPassword is wrong`, HttpStatus.FORBIDDEN);
 
+    const newPassword = await bcrypt.hash(
+      updatePasswordDto.newPassword,
+      +process.env.CRYPT_SALT,
+    );
+
     return this.databaseService.userService.update(id, {
-      password: updatePasswordDto.newPassword,
+      password: newPassword,
       version: { increment: 1 },
     });
   }

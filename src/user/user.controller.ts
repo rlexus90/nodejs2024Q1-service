@@ -11,15 +11,18 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/createUserDto';
 import { UserService } from './user.service';
 import { UpdatePasswordDto } from './dto/updatePasswordDto';
 import { UserEntity } from 'src/database/entity/userEntity';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
+@UseGuards(AuthGuard)
 export class UserController {
   constructor(private userService: UserService) {}
 

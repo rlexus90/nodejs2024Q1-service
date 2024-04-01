@@ -11,15 +11,18 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { Track } from 'src/types/track';
 import { CreateTrackDto } from './dto/createTrackDto';
 import { UpdateTrackDto } from './dto/updateTrackDto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('track')
 @UseInterceptors(ClassSerializerInterceptor)
+@UseGuards(AuthGuard)
 export class TrackController {
   constructor(private trackService: TrackService) {}
 

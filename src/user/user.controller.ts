@@ -1,49 +1,58 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
-import { User, UserResp } from 'src/types/user';
-import { CreateUserDto } from './dto/greateUserDto';
+import { CreateUserDto } from './dto/createUserDto';
 import { UserService } from './user.service';
 import { UpdatePasswordDto } from './dto/updatePasswordDto';
+import { UserEntity } from 'src/database/entity/userEntity';
 
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('')
-  getUsers(): User[] {
-    return this.userService.returnAllUsers();
+  async getUsers(): Promise<UserEntity[]> {
+    return await this.userService.returnAllUsers();
   }
 
   @Get(':id')
-  getUser(@Param('id', ParseUUIDPipe) id: string): User {
-    return this.userService.returtUserbyId(id);
+  async getUser(@Param('id', ParseUUIDPipe) id: string): Promise<UserEntity> {
+    return await this.userService.returnUserById(id);
   }
 
   @Post('')
-  createUser(@Body() createUserDto: CreateUserDto): UserResp {
-    return this.userService.createUser(createUserDto);
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+    return await this.userService.createUser(createUserDto);
   }
 
   @Put(':id')
-  updatePassword(
+  async updatePassword(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
-  ): UserResp {
-    return this.userService.updateUserPassword(id, updatePasswordDto);
+  ): Promise<UserEntity> {
+    return await this.userService.updateUserPassword(id, updatePasswordDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  deleteUser(@Param('id', ParseUUIDPipe) id: string) {
-    this.userService.deleteUser(id);
+  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      await this.userService.deleteUser(id);
+    } catch {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
   }
 }

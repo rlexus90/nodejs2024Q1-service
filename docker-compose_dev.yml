@@ -1,0 +1,50 @@
+services:
+  db:
+    container_name: home-library-DB
+    image: postgres:16.2-alpine3.19
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_LOGIN}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '${DATABASE_PORT_DOCKER}:${DATABASE_PORT}'
+    networks:
+        - my_network
+
+  app:
+    container_name: home-library-dev
+    image: home-library-dev
+    build:
+      context: .
+      target: build
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - '${PORT}:${PORT}'
+    environment:
+      DATABASE_LOGIN: ${DATABASE_LOGIN}
+      DATABASE_PASS: ${DATABASE_PASS}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_PORT_DOCKER: ${DATABASE_PORT_DOCKER}
+      DATABASE_HOST: db
+      DATABASE_URL: 'postgresql://${DATABASE_LOGIN}:${DATABASE_PASS}@db:${DATABASE_PORT}/${DATABASE_NAME}?schema=public'
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - my_network
+    command: npm run start:debug
+    
+networks:
+  my_network:
+    name: my_network
+    driver: bridge
+volumes:
+  pgdata:
+

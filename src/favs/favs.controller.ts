@@ -1,54 +1,101 @@
 import {
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import { FavoritesResponse } from 'src/types/favorites';
 
 @Controller('favs')
+@UseInterceptors(ClassSerializerInterceptor)
 export class FavsController {
   constructor(private favsService: FavsService) {}
 
   @Get('')
-  getFavs(): FavoritesResponse {
-    return this.favsService.returnFavs();
+  async getFavs(): Promise<FavoritesResponse> {
+    return await this.favsService.returnFavs();
   }
 
   @Post('track/:id')
-  setTrackToFavs(@Param('id', ParseUUIDPipe) id: string) {
-    this.favsService.setTrack(id);
+  async setTrackToFavs(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      await this.favsService.setTrack(id);
+    } catch {
+      throw new HttpException(
+        'Track not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
   }
 
   @Delete('track/:id')
   @HttpCode(204)
-  delTrackFromFavs(@Param('id', ParseUUIDPipe) id: string) {
-    this.favsService.delTrack(id);
+  async delTrackFromFavs(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      await this.favsService.delTrack(id);
+    } catch {
+      throw new HttpException(
+        'This track is not favorite',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   @Post('album/:id')
-  setAlbumToFavs(@Param('id', ParseUUIDPipe) id: string) {
-    this.favsService.setAlbum(id);
+  async setAlbumToFavs(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      await this.favsService.setAlbum(id);
+    } catch {
+      throw new HttpException(
+        'Album not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
   }
 
   @Delete('album/:id')
   @HttpCode(204)
-  delAlbumFromFavs(@Param('id', ParseUUIDPipe) id: string) {
-    this.favsService.delAlbum(id);
+  async delAlbumFromFavs(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      await this.favsService.delAlbum(id);
+    } catch {
+      throw new HttpException(
+        'This album is not favorite',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   @Post('artist/:id')
-  setArtistToFavs(@Param('id', ParseUUIDPipe) id: string) {
-    this.favsService.setArtist(id);
+  async setArtistToFavs(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      await this.favsService.setArtist(id);
+    } catch {
+      throw new HttpException(
+        'Artist not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
   }
 
   @Delete('artist/:id')
   @HttpCode(204)
-  delArtistromFavs(@Param('id', ParseUUIDPipe) id: string) {
-    this.favsService.delArtist(id);
+  async delArtistFromFavs(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      await this.favsService.delArtist(id);
+    } catch {
+      throw new HttpException(
+        'This artist is not favorite',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }

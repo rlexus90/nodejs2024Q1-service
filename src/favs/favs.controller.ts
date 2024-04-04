@@ -9,13 +9,19 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  UseGuards,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import { FavoritesResponse } from 'src/types/favorites';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('favs')
 @UseInterceptors(ClassSerializerInterceptor)
+@UsePipes(new ValidationPipe())
+@UseGuards(AuthGuard)
 export class FavsController {
   constructor(private favsService: FavsService) {}
 

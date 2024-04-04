@@ -23,12 +23,13 @@
     "docker:prod": "docker-compose up --build",
     "docker:dev": "docker-compose  -f docker-compose_dev.yml up --build",
     "docker:hub": "docker build -t home-library_hub .",
-    "migrate" : "npx prisma migrate dev",
-    "docker:scan" : "docker scout cves",
+    "migrate": "npx prisma migrate dev",
+    "docker:scan": "docker scout cves",
     "create:db": "docker run -d --name postgres -p 5433:5432 -e POSTGRES_PASSWORD=qwerty postgres"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.3",
+    "@nestjs/config": "^3.2.1",
     "@nestjs/core": "^10.3.3",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/mapped-types": "^2.0.5",

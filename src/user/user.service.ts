@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserDto } from 'src/types/user';
 import { CreateUserDto } from './dto/createUserDto';
 import * as uuid from 'uuid';
+import * as bcrypt from 'bcrypt';
 import { DatabaseService } from 'src/database/database.service';
 import { UpdatePasswordDto } from './dto/updatePasswordDto';
 import { UserEntity } from 'src/database/entity/userEntity';
@@ -11,8 +12,13 @@ export class UserService {
   constructor(private databaseService: DatabaseService) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const password = await bcrypt.hash(
+      createUserDto.password,
+      +process.env.CRYPT_SALT,
+    );
     const userDto: UserDto = {
       ...createUserDto,
+      password,
       id: uuid.v4(),
     };
     return await this.databaseService.userService.set(userDto);
@@ -34,11 +40,21 @@ export class UserService {
 
     if (!user) throw new HttpException(`User not found`, HttpStatus.NOT_FOUND);
 
-    if (user.password !== updatePasswordDto.oldPassword)
+    const match = await bcrypt.compare(
+      updatePasswordDto.oldPassword,
+      user.password,
+    );
+
+    if (!match)
       throw new HttpException(`oldPassword is wrong`, HttpStatus.FORBIDDEN);
 
+    const newPassword = await bcrypt.hash(
+      updatePasswordDto.newPassword,
+      +process.env.CRYPT_SALT,
+    );
+
     return this.databaseService.userService.update(id, {
-      password: updatePasswordDto.newPassword,
+      password: newPassword,
       version: { increment: 1 },
     });
   }

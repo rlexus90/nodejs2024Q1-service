@@ -19,7 +19,7 @@ services:
     image: home-library-dev
     build:
       context: .
-      target: build
+      dockerfile: Dockerfile_dev
     depends_on:
       - db
     restart: always
@@ -37,9 +37,10 @@ services:
       - .env
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
     networks:
       - my_network
-    command: npm run start:debug
+    # command: npm run start:debug
     
 networks:
   my_network:

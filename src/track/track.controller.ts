@@ -13,6 +13,8 @@ import {
   Put,
   UseGuards,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { Track } from 'src/types/track';
@@ -22,6 +24,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('track')
 @UseInterceptors(ClassSerializerInterceptor)
+@UsePipes(new ValidationPipe())
 @UseGuards(AuthGuard)
 export class TrackController {
   constructor(private trackService: TrackService) {}

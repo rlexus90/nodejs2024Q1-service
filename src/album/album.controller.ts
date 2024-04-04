@@ -13,6 +13,8 @@ import {
   Put,
   UseGuards,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { Album } from 'src/types/album';
@@ -23,6 +25,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('album')
 @UseInterceptors(ClassSerializerInterceptor)
+@UsePipes(new ValidationPipe())
 @UseGuards(AuthGuard)
 export class AlbumController {
   constructor(private albumService: AlbumService) {}

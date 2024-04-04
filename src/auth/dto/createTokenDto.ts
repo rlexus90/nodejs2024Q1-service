@@ -1,4 +1,4 @@
 export interface CreateTokenDto {
-  id: string;
+  userId: string;
   login: string;
 }

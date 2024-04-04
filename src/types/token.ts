@@ -4,7 +4,7 @@ export enum TokenType {
 }
 
 export type Payload = {
-  id: string;
+  userId: string;
   login: string;
   type: TokenType;
 };

@@ -35,14 +35,14 @@ export class AuthService {
     if (!user)
       throw new HttpException(`Authentication failed`, HttpStatus.FORBIDDEN);
 
-    return createToken({ id: user.id, login: user.login }, this.jwtService);
+    return createToken({ userId: user.id, login: user.login }, this.jwtService);
   }
 
   async refresh(refreshDto: RefreshDto) {
     try {
       const decode = await this.jwtService.verify(refreshDto.refreshToken);
       return createToken(
-        { id: decode.id, login: decode.login },
+        { userId: decode.userId, login: decode.login },
         this.jwtService,
       );
     } catch {
